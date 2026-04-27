@@ -1,16 +1,26 @@
-const express = require('express');
-const app = express();
+const { Pool } = require('pg');
+require('dotenv').config();
 
-// Allows app to read JSON from request body
-app.use(express.json());
-
-// Health check endpoint - Jenkins/K8s uses this to check if app is alive
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+// Pool = a connection to Postgres using creds from .env
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 });
 
-// All /notes requests go to routes.js
-const notesRouter = require('./routes');
-app.use('/notes', notesRouter);
+// This runs once when app starts - creates the table if it doesn't exist
+const initDB = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notes (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+  console.log('Database ready');
+};
 
-module.exports = app;
+module.exports = { pool, initDB };
