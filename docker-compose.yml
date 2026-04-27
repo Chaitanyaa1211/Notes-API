@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  
+  app:
+    image: notes-api:latest
+    container_name: notes-app-container
+    ports:
+      - "3000:3000"
+        
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: notesdb
+      DB_USER: postgres
+      DB_PASSWORD:  postgres
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: notesdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+
