@@ -9,11 +9,11 @@ WORKDIR		/app
 COPY		./src/package*.json	./
 
 
-RUN		npm install
+RUN		npm ci --only=production
 
 
-COPY		./src/*		.
+COPY		./src/		.
 
 EXPOSE		3000
 
-CMD		["npm", start"]					
+CMD		["npm", "start"]					
