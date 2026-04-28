@@ -8,7 +8,7 @@ metadata:
 
 
 spec:
-  type: Nodeport
+  type: NodePort
   selector:
     app: notes-api-app
 
@@ -16,4 +16,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 3000
-      nodeport: 30007
+      nodePort: 30007
