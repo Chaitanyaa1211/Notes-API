@@ -37,10 +37,10 @@ pipeline {
         stage ("Deploy") {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh """ 
-                        sed -i 's|${IMAGE_NAME}:latest|${IMAGE_NAME}:${TAG}|g' k8s/notes-api-app.yml
-                        kubectl apply -f k8s/
-                        """
+                    sh '''
+			helm upgrade --install notes-api helm/notes-api/ \
+			--set image.tag=${TAG} 
+                       '''
                 }
             }
         }
