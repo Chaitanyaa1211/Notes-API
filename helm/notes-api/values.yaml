@@ -1,0 +1,42 @@
+app:
+  replicaCount: 2
+
+  image:
+    repository:  chaitanyaaaa/notes-api
+    tag       :  "latest"
+
+
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 3000
+    nodePort: 30007
+
+  env:
+    DB_PORT: "5432"
+    DB_USER: postgres
+    DB_PASSWORD: postgres
+    DB_NAME:  notesdb
+
+
+postgres:
+
+  replicaCount: 1
+
+  image:
+    repository: postgres
+    tag:        "15"
+
+
+  service:
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+
+  env:
+    POSTGRES_DB:  notesdb
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+
+
+      
